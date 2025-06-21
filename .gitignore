@@ -1,0 +1,35 @@
+# Ignora dependências do Node.js
+node_modules/
+
+# Ignora variáveis de ambiente e arquivos sensíveis
+.env
+.env.*
+
+# Ignora logs
+*.log
+
+# Ignora arquivos temporários e de lock de editores
+*.swp
+*.swo
+.vscode/
+~lock.*
+
+# Ignora arquivos temporários do LibreOffice
+*.odt#
+
+# Ignora banco de dados locais ou arquivos de teste de DB
+*.sql
+*.sqlite
+*.db
+*.db.*
+
+# Ignora cobertura de testes (caso use)
+coverage/
+
+# Ignora diretórios ou arquivos docker temporários (caso existam)
+**/.docker/
+
+# Ignora arquivos de sistema
+.DS_Store
+Thumbs.db
+

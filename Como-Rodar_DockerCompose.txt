@@ -1,0 +1,113 @@
+﻿# Sistema Escolar - Instruções para Rodar
+
+## 1. Subir os containers
+```bash
+docker-compose up -d
+
+
+1. Criar a tabela users no MySQL via container
+Você pode usar o terminal assim:
+bash
+
+CopiarEditar
+
+docker exec -it sistema-escola-mysql bash
+
+mysql -u root -p
+
+# Digite: senha123
+
+USE sistema_escola;
+
+
+#### Como rodar o mysql#####
+
+✅ 1. Usar o phpMyAdmin via navegador
+Você já tem o container sistema-escola-phpmyadmin rodando, então pode acessar o MySQL por ele:
+
+Passos:
+Abra o navegador.
+
+Vá para:
+
+arduino
+Copiar
+Editar
+
+http://localhost:8080
+(ou a porta que você definiu no docker-compose.yml)
+
+Use as credenciais que você configurou no seu docker-compose.yml, por exemplo:
+
+Servidor (host): sistema-escola-mysql ou mysql
+
+Usuário: root ou o que você definiu
+
+Senha: a senha que colocou em MYSQL_ROOT_PASSWORD
+
+✅ 2. Acessar direto via terminal do container
+Se quiser usar o terminal para se conectar ao banco de dados MySQL:
+
+Comando:
+
+bash
+
+Copiar
+Editar
+
+docker exec -it sistema-escola-mysql mysql -u root -p
+
+Depois disso, o terminal pedirá a senha. Digite a senha definida na variável MYSQL_ROOT_PASSWORD do docker-compose.yml.
+
+🛠️ Dica Extra: Verifique seu docker-compose.yml
+Se você tiver dúvida sobre as credenciais, veja o conteúdo do seu docker-compose.yml. Ele deve conter algo como:
+
+docker-Compose.yml :
+
+version: "3.8"
+
+services:
+  app:
+    build: .
+    container_name: sistema-escola-app
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    env_file:
+      - .env.docker
+    depends_on:
+      - mysql
+    command: npm run dev # ✅ Corrigido aqui
+
+  mysql:
+    image: mysql:8.0
+    container_name: sistema-escola-mysql
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: senha123
+      MYSQL_DATABASE: sistema_escola
+    volumes:
+      - db_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: sistema-escola-phpmyadmin
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: senha123
+
+volumes:
+  db_data:
+
+
+
+
+

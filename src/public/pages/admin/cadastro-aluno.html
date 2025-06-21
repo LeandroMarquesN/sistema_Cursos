@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Cadastro de Aluno</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-light">
+
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+
+        <div class="card shadow">
+          <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Cadastro de Aluno</h4>
+          </div>
+
+          <div class="card-body">
+            <form id="cadastroAlunoForm">
+              <div class="mb-3">
+                <label for="nome" class="form-label">Nome</label>
+                <input type="text" class="form-control" id="nome" required>
+              </div>
+
+              <div class="mb-3">
+                <label for="email" class="form-label">E-mail</label>
+                <input type="email" class="form-control" id="email" required>
+              </div>
+
+              <div class="mb-3">
+                <label for="senha" class="form-label">Senha</label>
+                <input type="password" class="form-control" id="senha" required>
+              </div>
+
+              <input type="hidden" id="tipo" value="aluno">
+
+              <button type="submit" class="btn btn-success w-100">Cadastrar</button>
+            </form>
+          </div>
+        </div>
+
+        <div class="text-center mt-3">
+          <a href="dashboard.html">Voltar ao Dashboard</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('cadastroAlunoForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const nome = document.getElementById('nome').value;
+      const email = document.getElementById('email').value;
+      const senha = document.getElementById('senha').value;
+      const tipo = document.getElementById('tipo').value;
+
+      console.log({ nome, email, senha, tipo });
+
+      // Em breve aqui entra o fetch para API (POST para /api/users)
+    });
+  </script>
+</body>
+</html>
