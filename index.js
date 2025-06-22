@@ -14,7 +14,7 @@ app.use(express.json());
 
 // Servir arquivos estáticos (como HTML, CSS, JS)
 // Ajuste conforme a pasta onde estão seus HTMLs
-app.use(express.static(path.join(__dirname, 'src/public')));
+app.use(express.static(path.join(__dirname, 'src/pages')));
 
 // Rotas da API
 const authRoutes = require('./src/routes/authRoutes');
