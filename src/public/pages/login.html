@@ -102,42 +102,50 @@
   </div>
 
   <script>
-    // Toggle manual de dark mode
+    // Seleciona o botão de modo escuro (dark mode) pelo ID
     const toggleDark = document.getElementById('toggleDark');
+  
+    // Quando o botão for clicado, alterna a classe 'dark-mode' no <body>
     toggleDark.addEventListener('click', () => {
       document.body.classList.toggle('dark-mode');
     });
-
+  
+    // Adiciona um ouvinte de evento para o envio do formulário de login
     document.getElementById('loginForm').addEventListener('submit', async function(e) {
-      e.preventDefault();
-
+      e.preventDefault(); // Impede o comportamento padrão do formulário (recarregar a página)
+  
+      // Captura os valores inseridos nos campos do formulário
       const tipo = document.getElementById('tipo').value;
-      const usuario = document.getElementById('usuario').value;
+      const email = document.getElementById('usuario').value; // Aqui o campo visual se chama "usuario", mas o backend espera "email"
       const senha = document.getElementById('senha').value;
-
+  
+      // Verifica se o usuário escolheu o tipo (admin, aluno ou professor)
       if (!tipo) {
         alert('Por favor, selecione o tipo de usuário.');
         return;
       }
-
-      const data = { usuario, senha, tipo };
-
+  
+      // Prepara o objeto com os dados a serem enviados para o backend
+      const data = { email, senha, tipo };
+  
       try {
+        // Envia os dados para a rota de login via método POST
         const res = await fetch('/api/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
+          body: JSON.stringify(data) // Converte os dados para JSON
         });
-
+  
+        // Se o status da resposta não for OK (ex: 401 ou 403), exibe erro
         if (!res.ok) {
           alert('Usuário ou senha inválidos');
           return;
         }
-
-        // Você ainda pode validar o tipo retornado pelo backend, se quiser
+  
+        // Armazena o tipo de usuário na sessionStorage (memória temporária da aba)
         sessionStorage.setItem('tipoUsuario', tipo);
-
-        // Redirecionamento com base no tipo selecionado
+  
+        // Redireciona o usuário para o painel correspondente ao tipo dele
         if (tipo === 'admin') {
           window.location.href = '/pages/admin/dashboard.html';
         } else if (tipo === 'aluno') {
@@ -147,12 +155,16 @@
         } else {
           alert('Tipo de usuário inválido');
         }
+  
       } catch (error) {
+        // Captura qualquer erro na requisição (ex: servidor offline)
         alert('Erro na conexão com o servidor');
         console.error(error);
       }
     });
   </script>
+  
+
 
 </body>
 </html>
