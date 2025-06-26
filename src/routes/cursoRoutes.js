@@ -1,30 +1,27 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../config/db'); // Conexão com MySQL
+const verificarToken = require('../middleware/auth'); // Proteção por token
+const db = require('../config/db');
 
-// Rota para cadastrar curso
-router.post('/', (req, res) => {
-    const { nome, descricao } = req.body;
-
-    const sql = 'INSERT INTO cursos (nome, descricao) VALUES (?, ?)';
-    db.query(sql, [nome, descricao], (err, result) => {
-        if (err) {
-            console.error('Erro ao inserir curso:', err);
-            return res.status(500).json({ erro: 'Erro ao cadastrar curso' });
-        }
-        res.status(201).json({ mensagem: 'Curso cadastrado com sucesso!', id: result.insertId });
+// Listar todos os cursos
+router.get('/', verificarToken, (req, res) => {
+    db.query('SELECT * FROM cursos', (err, results) => {
+        if (err) return res.status(500).json({ error: 'Erro ao buscar cursos' });
+        res.json(results);
     });
 });
 
-// Rota para listar cursos
-router.get('/', (req, res) => {
-    const sql = 'SELECT * FROM cursos';
-    db.query(sql, (err, results) => {
-        if (err) {
-            console.error('Erro ao buscar cursos:', err);
-            return res.status(500).json({ erro: 'Erro ao buscar cursos' });
-        }
-        res.status(200).json(results);
+// Criar novo curso
+router.post('/', verificarToken, (req, res) => {
+    const { nome, descricao } = req.body;
+    if (!nome || !descricao) {
+        return res.status(400).json({ error: 'Nome e descrição são obrigatórios' });
+    }
+
+    const sql = 'INSERT INTO cursos (nome, descricao) VALUES (?, ?)';
+    db.query(sql, [nome, descricao], (err, result) => {
+        if (err) return res.status(500).json({ error: 'Erro ao criar curso' });
+        res.status(201).json({ message: 'Curso criado com sucesso!', id: result.insertId });
     });
 });
 

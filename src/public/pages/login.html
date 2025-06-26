@@ -99,6 +99,7 @@
       </div>
       <button type="submit" class="btn btn-primary w-100">Entrar</button>
     </form>
+    .
   </div>
 
   <script>
@@ -130,7 +131,7 @@
   
       try {
         // Envia os dados para a rota de login via método POST
-        const res = await fetch('/api/login', {
+        const res = await fetch('/api/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data) // Converte os dados para JSON
