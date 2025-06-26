@@ -90,7 +90,7 @@
         </select>
       </div>
       <div class="mb-3">
-        <label for="usuario" class="form-label">Usuário</label>
+        <label for="usuario" class="form-label">E-mail</label>
         <input type="text" class="form-control" name="usuario" id="usuario" required />
       </div>
       <div class="mb-3">
@@ -138,24 +138,28 @@
         });
   
         // Se o status da resposta não for OK (ex: 401 ou 403), exibe erro
-        if (!res.ok) {
-          alert('Usuário ou senha inválidos');
-          return;
-        }
-  
-        // Armazena o tipo de usuário na sessionStorage (memória temporária da aba)
-        sessionStorage.setItem('tipoUsuario', tipo);
-  
-        // Redireciona o usuário para o painel correspondente ao tipo dele
-        if (tipo === 'admin') {
-          window.location.href = '/pages/admin/dashboard.html';
-        } else if (tipo === 'aluno') {
-          window.location.href = '/pages/alunos/dashboard.html';
-        } else if (tipo === 'professor') {
-          window.location.href = '/pages/professores/dashboard.html';
-        } else {
-          alert('Tipo de usuário inválido');
-        }
+        const resultado = await res.json();
+
+if (!res.ok) {
+  alert(resultado.error || 'Usuário ou senha inválidos');
+  return;
+}
+
+// Armazena o tipo de usuário e token na sessionStorage
+sessionStorage.setItem('tipoUsuario', resultado.tipo);
+sessionStorage.setItem('token', resultado.token);
+
+// Redireciona conforme o tipo retornado pelo backend
+if (resultado.tipo === 'admin') {
+  window.location.href = '/pages/admin/dashboard.html';
+} else if (resultado.tipo === 'aluno') {
+  window.location.href = '/pages/alunos/dashboard.html';
+} else if (resultado.tipo === 'professor') {
+  window.location.href = '/pages/professores/dashboard.html';
+} else {
+  alert('Tipo de usuário inválido');
+}
+
   
       } catch (error) {
         // Captura qualquer erro na requisição (ex: servidor offline)
